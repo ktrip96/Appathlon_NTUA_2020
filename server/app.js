@@ -1,12 +1,17 @@
 const express = require("express")
-const { mongo } = require("mongoose")
 const app = express()
 const mongoose = require("mongoose")
-require("dotenv").config()
+const cors = require('cors')
+require('dotenv').config()
 
 
 // Middlewares
+app.use(cors())
 
+// the following lines need in order to automatically 
+// convert req, res to json format.
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
 
 // import Routes
 const postsRoute = require('./routes/posts')
@@ -19,6 +24,8 @@ app.get('/',(req,res)=>{
 })
 
 // Connect to DB
+
+// setting some parametres to ignore some mongoose errors
 mongoose.set("useNewUrlParser", true)
 mongoose.set("useFindAndModify", false)
 mongoose.set("useCreateIndex", true)
@@ -28,4 +35,4 @@ mongoose.connect(process.env.DB_CONNECTION, () => {
 })
 
 // Start listening to the server
-app.listen(3000)
+app.listen(4000)
