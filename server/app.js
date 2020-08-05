@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express()
+const port = process.env.PORT || 5000;
 const mongoose = require("mongoose")
 const cors = require('cors')
 require('dotenv').config()
@@ -14,9 +15,11 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 // import Routes
-const postsRoute = require('./routes/posts')
+const usersRoute = require('./routes/users')
+const crimesRoute = require('./routes/crimes')
 
-app.use('/posts',postsRoute)
+app.use('/crimes',crimesRoute)
+app.use('/users',usersRoute)
 
 // Routes
 app.get('/',(req,res)=>{
@@ -24,15 +27,13 @@ app.get('/',(req,res)=>{
 })
 
 // Connect to DB
-
-// setting some parametres to ignore some mongoose errors
-mongoose.set("useNewUrlParser", true)
-mongoose.set("useFindAndModify", false)
-mongoose.set("useCreateIndex", true)
-
-mongoose.connect(process.env.DB_CONNECTION, () => {
-  console.log("Connected to Database")
+mongoose.connect(process.env.DB_CONNECTION,{useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+const connection = mongoose.connection
+connection.once('open',()=>{
+  console.log('MongoDB database established successfully')
 })
 
 // Start listening to the server
-app.listen(4000)
+app.listen(port,()=>{
+  console.log(`Server is running on port: ${port}`)
+})
