@@ -8,6 +8,7 @@ const crimeSchema = new Schema({
         required:true
     }, 
     description: String, 
+    area: String
     // date: {
     //     type:Date,
     //     default:Date.now

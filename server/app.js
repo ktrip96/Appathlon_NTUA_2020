@@ -17,9 +17,11 @@ app.use(express.json())
 // import Routes
 const usersRoute = require('./routes/users')
 const crimesRoute = require('./routes/crimes')
+const areasRoute = require('./routes/areas')
 
 app.use('/crimes',crimesRoute)
 app.use('/users',usersRoute)
+app.use('/areas', areasRoute)
 
 // Routes
 app.get('/',(req,res)=>{
