@@ -9,6 +9,13 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error '+ err))
 })
 
+// COUNT ALL CRIMES 
+router.route('/count').get((req,res) => {
+  Crime.estimatedDocumentCount()
+  .then(crimes => res.json({count:crimes}))
+  .catch(err => res.status(400).json('Error '+ err))
+})
+
 // GET A SPECIFIC CRIME
 router.route('/:id').get((req,res)=>{
   Crime.findById(req.params.id)

@@ -7,12 +7,23 @@ const crimeSchema = new Schema({
         type:String, 
         required:true
     }, 
-    description: String, 
-    area: String
-    // date: {
-    //     type:Date,
-    //     default:Date.now
-    // }
+    description: {
+        type:String, 
+        required:true
+    }, 
+    area: {
+        type:String, 
+        required:true
+    },
+    verified: {
+        type:Boolean,
+        required:true,
+        default:false
+    },
+    date: {
+        type:Date,
+        default:Date.now
+    }
 })
 
 const Crime = mongoose.model('Crime', crimeSchema)

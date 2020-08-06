@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const Area = require('../models/Areas')
+const { db } = require('../models/Areas')
 
 // GET ALL AREAS
 router.route('/').get((req, res) => {
@@ -8,9 +9,21 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error '+ err))
 })
 
+// COUNT ALL AREAS
 router.route('/count').get((req,res) => {
     Area.estimatedDocumentCount()
     .then(areas => res.json({count:areas}))
+    .catch(err => res.status(400).json('Error '+ err))
+})
+
+// TEST QUERY
+router.route('/test').get((req,res) => {
+    Area.aggregate(
+        [
+            {$sort: {validCrimes: -1}}
+        ]
+    ).limit(req.body.number)
+    .then(areas => res.json(areas))
     .catch(err => res.status(400).json('Error '+ err))
 })
 

@@ -14,11 +14,9 @@ const areaSchema = new Schema({
     postedCrimes:{
         type: Number,
         default: 0
-    }
-    // date: {
-    //     type:Date,
-    //     default:Date.now
-    // }
+    },
+    lang: Number,
+    long: Number
 })
 
 const Area = mongoose.model('Area', areaSchema)
