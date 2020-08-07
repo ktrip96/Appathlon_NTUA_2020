@@ -64,25 +64,3 @@ router.route('/:id').delete((req,res)=>{
 })
 
 module.exports = router;
-// Submits a post
-
-// router.post('/',(req,res)=>{
-//   const post = new Crime({
-//     title: req.body.title,
-//     description: req.body.description
-//   })
-
-//   // creates a promise
-//   post.save()
-//   .then(data=>{
-//     res.json(data)
-//   })
-//   .catch(error=>{
-//     res.json({message:error})
-//   })
-// })
-
-// router.get('/:postId', (req,res)=>{
-//   console.log(req.params.postId)
-// })
-
