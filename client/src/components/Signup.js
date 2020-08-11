@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import UserContext from "../context/UserContext"
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +43,54 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Signup({toggle}) {
   const classes = useStyles();
+  const [credentials, setCredentials] = useState({username:"",email:"",password:""})
+  // eslint-disable-next-line
+  const { userData, setUserData } = useContext(UserContext)
+
+
+  function handleChange(e){
+    const {name,value} = e.target
+    setCredentials(prev => ({...prev, [name]:value}))
+  }
+
+  function handleSubmit(){
+    let url = 'http://localhost:5000/users/register'
+    fetch(url,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        email:credentials.email,
+        password:credentials.password,
+        username:credentials.username
+      })
+    })
+    .then(response => response.json())
+    .then(res =>{
+      console.log("signup result:",res)
+      url = 'http://localhost:5000/users/login'
+      return fetch(url,{
+        method:'POST', 
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          username:credentials.username,
+          password:credentials.password
+        })
+      })
+      .then(response => response.json())
+      .then(result =>{
+        console.log("TOKEN IS ", res.token)
+         localStorage.setItem('auth-token',result.token)
+         console.log("sign in result:", result)
+         setUserData({token:result.token, user:result.user})
+      })
+      .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+  }
 
   return (
       <div className={classes.paper}>
@@ -61,6 +111,7 @@ export default function Signup({toggle}) {
                 fullWidth
                 id="username"
                 label="Username"
+                onChange={handleChange}
                 autoFocus
               />
             </Grid>
@@ -73,6 +124,7 @@ export default function Signup({toggle}) {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -85,6 +137,7 @@ export default function Signup({toggle}) {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
             </Grid>
           </Grid>
@@ -95,6 +148,7 @@ export default function Signup({toggle}) {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Sign Up
           </Button>

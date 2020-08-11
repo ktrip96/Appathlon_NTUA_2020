@@ -2,7 +2,7 @@ const router = require("express").Router()
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const auth = require('../middleware/auth')
+const auth = require("../middleware/auth")
 const { findByIdAndDelete } = require("../models/User")
 
 // Get all Users
@@ -15,7 +15,7 @@ router.route("/").get((req, res) => {
 // Register A New User
 router.post("/register", async (req, res) => {
   try {
-    const { email, password } = req.body
+    const { email, password} = req.body
     let { username } = req.body
 
     // validate
@@ -29,7 +29,7 @@ router.post("/register", async (req, res) => {
         .status(400)
         .json({ message: "Password needs to be at least 5 characters long" })
 
-    const existingUser = await User.findOne({ email: email })
+    let existingUser = await User.findOne({ email: email })
     if (existingUser)
       return res
         .status(400)
@@ -42,7 +42,6 @@ router.post("/register", async (req, res) => {
       return res
         .status(400)
         .json({ message: "Account with this username already exists" })
-
 
     const salt = await bcrypt.genSalt()
     const passwordHash = await bcrypt.hash(password, salt)
@@ -61,63 +60,79 @@ router.post("/register", async (req, res) => {
 
 // Login User
 
-router.post('/login', async(req,res) => {
-  try{
-   const {username,password} = req.body
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body
 
-  // validate
-  if(!username || !password) res.status(400).json({message:"Not all fields have been entered"})
+    // validate
+    if (!username || !password)
+      res.status(400).json({ message: "Not all fields have been entered" })
 
-  const user = await User.findOne({username:username})
-  if(!user) 
-    return res.status(400).json({message:`The user ${username} does not exist`})
-  
-  const isMatch = await bcrypt.compare(password, user.password)
-  if(!isMatch)
-    return res.status(400).json({message:"Wrong password"})
-    
-    const token = jwt.sign({id:user._id}, process.env.JWT_SECRET)
+    const user = await User.findOne({ username: username })
+    if (!user)
+      return res
+        .status(400)
+        .json({ message: `The user ${username} does not exist` })
+
+    const isMatch = await bcrypt.compare(password, user.password)
+    if (!isMatch) return res.status(400).json({ message: "Wrong password" })
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
     res.json({
-      token:token,
-      user:{
-        id:user._id,
-        email:user.email,
-        username:user.username
-      }
+      token: token,
+      user: {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      },
     })
-  
-  } catch(err){
-    res.status(500).json({error: err.message})
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 })
 
 // Private delete user with auth middleware
 
-router.route('/delete', auth, async (req,res)=>{
-  try{
-    const deletedUser = await findByIdAndDelete(req.user)
+router.delete("/delete", auth, async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.user)
     res.json(deletedUser)
-  } catch(err){
-    res.status(500).json({error: err.message})
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 })
 
 // Check if a token is Valid
 
-router.post('/tokenIsValid', async (req,res)=>{
-  try{
+router.post("/tokenIsValid", async (req, res) => {
+  try {
     const token = req.header("x-auth-token")
-    if(!token) return res.json(false)
+    if (!token) return res.json(false)
 
     const verified = jwt.verify(token, process.env.JWT_SECRET)
-    if(!verified) return res.json(false)
+    if (!verified) return res.json(false)
 
     const user = await User.findById(verified.id)
-    if(!user) return res.json(false)
+    if (!user) return res.json(false)
 
     return res.json(true)
-  } catch(err){
-    res.status(500).json({error: err.message})
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
+// Get a Single User if you have provided the right token
+
+router.get("/single", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user)
+    if(!user) return res.json({message:"There is no User with that token"})
+    res.json({
+      username: user.username,
+      id: user._id,
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
   }
 })
 

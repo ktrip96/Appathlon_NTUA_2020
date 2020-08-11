@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useContext} from "react"
 import Avatar from "@material-ui/core/Avatar"
 import Button from "@material-ui/core/Button"
 import TextField from "@material-ui/core/TextField"
@@ -8,7 +8,9 @@ import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 import Grid from "@material-ui/core/Grid"
 import Link2 from "@material-ui/core/Link"
-import {Link}from "react-router-dom"
+import { useHistory }from "react-router-dom"
+import UserContext from "../context/UserContext"
+import {Redirect} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
     color:'white',
     background:'#faa200',
     "&:hover": {
-        //you want this to be the same as the backgroundColor above
         backgroundColor: "#b57500"
     }
   },
@@ -40,7 +41,41 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Signin({ toggle }) {
   const classes = useStyles()
+  const [credentials, setCredentials] = useState({username:"", password:""}) 
+  // eslint-disable-next-line
+  const { userData, setUserData } = useContext(UserContext)
+  const history = useHistory()
 
+
+  function handleChange(event){
+    const {name,value} = event.target
+    setCredentials(prev => ({...prev, [name]:value}))
+  }
+
+  function handleSubmit(){
+    const url = 'http://localhost:5000/users/login'
+    fetch(url,{
+      method:'POST', 
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        username:credentials.username,
+        password:credentials.password
+      })
+    })
+    .then(response => response.json())
+    .then(res =>{
+       localStorage.setItem('auth-token',res.token)
+       setUserData({token:res.token, user:res.user})
+       // if wrong password alert
+       history.push('/main')
+    })
+    .catch(error => console.log(error))
+  } 
+
+
+  if(localStorage.getItem('auth-token') !== null && localStorage.getItem('auth-token').length > 1) return <Redirect to="/main"/>
   return (
     <div className={classes.paper}>
       <Avatar className={classes.avatar}>
@@ -55,11 +90,12 @@ export default function Signin({ toggle }) {
           margin="normal"
           required
           fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
+          id="username"
+          label="Username Address"
+          name="username"
+          autoComplete="username"
           autoFocus
+          onChange={handleChange}
         />
         <TextField
           variant="outlined"
@@ -71,16 +107,16 @@ export default function Signin({ toggle }) {
           type="password"
           id="password"
           autoComplete="current-password"
+          onChange={handleChange}
         />
-        <Link to='/main'>
         <Button
           fullWidth
           style={{ backgroundColor: '#ffaa200' }}
           className={classes.submit}
+          onClick={handleSubmit}
         >
           Sign In
         </Button>
-        </Link>
         <Grid container justify="center" alignItems="center">
           <Grid item>
             <Link2 href="#" variant="subtitle1" onClick={toggle}>

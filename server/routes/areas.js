@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const Area = require('../models/Areas')
-const { db } = require('../models/Areas')
 
 // GET ALL AREAS
 router.route('/').get((req, res) => {
@@ -16,7 +15,7 @@ router.route('/count').get((req,res) => {
     .catch(err => res.status(400).json('Error '+ err))
 })
 
-// TEST QUERY
+// TOP X AREAS
 router.route('/test').get((req,res) => {
     Area.aggregate(
         [
@@ -56,6 +55,7 @@ router.route('/update/:id').post((req,res)=>{
       })
   })
   
+ 
 
 
 module.exports = router;

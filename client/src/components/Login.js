@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import City from '../images/city.jpg'
 import Signin from './Signin';
-import Signup from './Signup'
+import Signup from './Signup';
 
 
 const useStyles = makeStyles((theme) => ({
