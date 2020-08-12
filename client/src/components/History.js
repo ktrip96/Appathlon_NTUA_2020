@@ -60,7 +60,6 @@ export default function History() {
   return (
     <div style={{ backgroundColor: "#EEEEEE" }}>
       <Header />
-      <h1>{day}{month}{year}</h1>
       <div style={container}>
         <img alt="dark city" style={image} src={Image} />
       </div>

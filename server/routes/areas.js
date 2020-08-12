@@ -16,12 +16,12 @@ router.route('/count').get((req,res) => {
 })
 
 // TOP X AREAS
-router.route('/test').get((req,res) => {
+router.route('/ranking').get((req,res) => {
     Area.aggregate(
         [
-            {$sort: {validCrimes: -1}}
+            {$sort: {postedCrimes: -1}}
         ]
-    ).limit(req.body.number)
+    ).limit(Number(req.query.number))
     .then(areas => res.json(areas))
     .catch(err => res.status(400).json('Error '+ err))
 })

@@ -39,7 +39,7 @@ router.route("/add").post((req, res) => {
   const type = req.body.type
   const description = req.body.description
   const area = req.body.area
-  const date = Date.parse(req.body.date)
+  const date = Date.now()
 
   const newCrime = new Crime({
     type,
