@@ -9,6 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { DatePicker, MuiPickersUtilsProvider, } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns'; 
+import AreaTable from './AreaTable'
 
 
 function monthConverter(number){
@@ -82,6 +83,7 @@ export default function Ranking() {
       />
       </MuiPickersUtilsProvider>
       <button onClick={handleSubmit}>Show Graph</button>
+      <AreaTable/>
     </div>
   )
 }
