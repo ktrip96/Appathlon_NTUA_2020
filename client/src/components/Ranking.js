@@ -21,7 +21,8 @@ function monthConverter(number){
 
 export default function Ranking() {
   const [value, setValue] = useState("3")
-  const [type, setType] = useState("All Crimes")
+  const [type, setType] = useState("All")
+  const [data, setData] = useState()
   const [selectedDate, handleDateChange] = useState(new Date());
   const [month, setMonth] = useState(monthConverter(selectedDate.getMonth()))
   const [year, setYear] = useState(selectedDate.getFullYear())
@@ -36,13 +37,17 @@ export default function Ranking() {
       method:'GET'
     })
     .then(response=>response.json())
-    .then(res => console.log('ranking', res))
+    .then(res => {
+      console.log(res)
+      setData(res)
+    })
     .catch(e => console.log(e))
   }
 
   return (
-    <div className="centralise2">
-      <FormControl component="fieldset">
+    <div className="centralise">
+      <div className='row'>
+      <FormControl component="fieldset" style={{marginTop:'15px', marginRight:'40px'}}>
         <FormLabel component="legend">Ranking</FormLabel>
         <RadioGroup
           aria-label="gender"
@@ -55,7 +60,20 @@ export default function Ranking() {
           <FormControlLabel value="10" control={<Radio />} label="Top 10" />
         </RadioGroup>
       </FormControl>
-      <FormControl variant="filled" style={{width:'300px'}}>
+      <MuiPickersUtilsProvider  utils={DateFnsUtils}>
+      <DatePicker
+        variant="inline"
+        openTo="year"
+        views={["year", "month"]}
+        label="Year and Month"
+        style={{marginTop:'15px'}}
+        helperText="Start from year selection"
+        value={selectedDate}
+        onChange={handleDateChange}
+      />
+      </MuiPickersUtilsProvider>
+      </div>
+      <FormControl variant="filled" style={{width:'300px', marginTop:'15px'}}>
         <InputLabel id="demo-simple-select-filled-label">Type of Crime</InputLabel>
         <Select
           labelId="demo-simple-select-filled-label"
@@ -71,19 +89,8 @@ export default function Ranking() {
           <MenuItem value={"Whatever2"}>Whatever2</MenuItem>
         </Select>
       </FormControl>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DatePicker
-        variant="inline"
-        openTo="year"
-        views={["year", "month"]}
-        label="Year and Month"
-        helperText="Start from year selection"
-        value={selectedDate}
-        onChange={handleDateChange}
-      />
-      </MuiPickersUtilsProvider>
-      <button onClick={handleSubmit}>Show Graph</button>
-      <AreaTable/>
+      <button style={{marginTop:'15px'}} onClick={handleSubmit}>Show Graph</button>
+      {data?<AreaTable data={data}/>:null}
     </div>
   )
 }

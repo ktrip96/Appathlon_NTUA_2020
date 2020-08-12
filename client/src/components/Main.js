@@ -16,8 +16,7 @@ import Ranking from './Ranking'
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
-    width: 800,
-    
+    maxWidth: 600,
   },
 })
 
@@ -45,8 +44,8 @@ export default function Main() {
             src={mainImage}
             alt="city"
             style={{
-              height: "850px",
-              width: "900px",
+              height: "800px",
+              width: "800px",
               objectFit: "cover",
               boxShadow: "0px 6px 24px -4px rgba(0,0,0,0.92)",
               borderRadius: "1%",

@@ -4,12 +4,19 @@
     grid-template-columns: repeat(2, auto);
 }
 
+.row{
+    display:flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+
 .boxA{  
     
 }
 
 .boxB{
-    margin-left: 20px;
+    margin-left: 0px;
 }
 
 .centralise{
@@ -18,9 +25,3 @@
    flex-direction: column;
    align-items: center;
 }
-
-.centralise2{
-    display:flex;
-    justify-content: center;
-    align-items: center;
- }
