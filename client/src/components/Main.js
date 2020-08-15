@@ -44,8 +44,8 @@ export default function Main() {
             src={mainImage}
             alt="city"
             style={{
-              height: "800px",
-              width: "800px",
+              height: "100%",
+              width: "100%",
               objectFit: "cover",
               boxShadow: "0px 6px 24px -4px rgba(0,0,0,0.92)",
               borderRadius: "1%",
