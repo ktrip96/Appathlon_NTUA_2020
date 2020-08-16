@@ -15,8 +15,9 @@ import Ranking from './Ranking'
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
-    maxWidth: 600,
+    marginTop:'30px',
+    width: 800,
+    marginBottom:'20px'
   },
 })
 
@@ -44,11 +45,12 @@ export default function Main() {
             src={mainImage}
             alt="city"
             style={{
-              height: "100%",
-              width: "100%",
-              objectFit: "cover",
+              height:'800px',
+              width:'900px',
               boxShadow: "0px 6px 24px -4px rgba(0,0,0,0.92)",
               borderRadius: "1%",
+              marginTop:'30px',
+              marginBottom:'10px'
             }}
           />
         </div>

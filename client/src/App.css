@@ -1,29 +1,42 @@
-.mainPage{
-    height:100%;
-    overflow:auto;
-    margin-top: 10px;
-    display:grid;
-    grid-template-columns: repeat(2, 1fr);
+.mainPage {
+    height: 100%;
+    /* border: 5px solid #ffcc5c; */
+    display: flex;
+    justify-content: center;
 }
 
-.row{
-    display:flex;
-    justify-content: center;
+.row {
+    width: 800px;
+    display: flex;
+    justify-content: space-around;
     flex-direction: row;
     align-items: center;
 }
 
-.boxA{  
-    
+.boxA {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.boxB{
-    margin-left: 0px;
+.boxB {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
-.centralise{
-   display:flex;
-   justify-content: center;
-   flex-direction: column;
-   align-items: center;
+.centralise {
+    width:800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+.centralise > div{
+    margin-top:20px;
+    margin-bottom: 10px;
+}
+
