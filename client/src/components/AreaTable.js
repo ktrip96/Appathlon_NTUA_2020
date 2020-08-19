@@ -35,7 +35,7 @@ export default class AreaTable extends PureComponent {
   render() {
     return (
       <BarChart
-        width={600}
+        width={800}
         height={400}
         data={this.props.data}
         margin={{

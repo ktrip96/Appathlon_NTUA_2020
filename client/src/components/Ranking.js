@@ -25,11 +25,24 @@ export default function Ranking() {
   const [selectedDate, handleDateChange] = useState(new Date())
   const [month, setMonth] = useState(monthConverter(selectedDate.getMonth()))
   const [year, setYear] = useState(selectedDate.getFullYear())
+  const [crimeData, setCrimeData] = useState([])
+
+  useEffect(()=>{
+    fetch('http://localhost:5000/crimes/distinct',{
+      method:'GET'
+    })
+    .then(res => res.json())
+    .then(result => {setCrimeData(result)})
+    .catch(e=>console.log(e))
+  },[])
 
   useEffect(() => {
     setMonth(monthConverter(selectedDate.getMonth()))
     setYear(selectedDate.getFullYear())
   }, [selectedDate])
+
+  const crimeMenu = crimeData.map((item) => <MenuItem value={item}>{item}</MenuItem>)
+
 
   function handleSubmit() {
     fetch(`http://localhost:5000/areas/ranking?number=${value}`, {
@@ -88,10 +101,7 @@ export default function Ranking() {
             value={type}
             onChange={(e) => setType(e.target.value)}
           >
-            <MenuItem value="All">All</MenuItem>
-            <MenuItem value={"Murder"}>Murder</MenuItem>
-            <MenuItem value={"Whatever"}>Whatever</MenuItem>
-            <MenuItem value={"Whatever2"}>Whatever2</MenuItem>
+            {crimeMenu}
           </Select>
         </FormControl>
       </div>

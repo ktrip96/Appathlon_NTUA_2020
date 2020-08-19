@@ -15,8 +15,8 @@ const areaSchema = new Schema({
         type: Number,
         default: 0
     },
-    lang: Number,
-    long: Number
+    lan: Number,
+    lon: Number
 })
 
 const Area = mongoose.model('Area', areaSchema)

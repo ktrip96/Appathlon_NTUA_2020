@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Input from "@material-ui/core/Input"
 import Button from "@material-ui/core/Button"
 import FormControl from "@material-ui/core/FormControl"
@@ -10,6 +10,24 @@ export default function CreateNew() {
   const [type, setType] = useState("Murder")
   const [area, setArea] = useState("Marousi")
   const [description, setDescription] = useState()
+  const [areaData, setAreaData] = useState([])
+  const [crimeData, setCrimeData] = useState([])
+
+  useEffect(()=>{
+    fetch('http://localhost:5000/areas/',{
+      method:'GET',
+    })
+    .then(response=>response.json())
+    .then(res => {setAreaData(res)})
+    .catch(e => console.log(e))
+
+    fetch('http://localhost:5000/crimes/distinct',{
+      method:'GET'
+    })
+    .then(res => res.json())
+    .then(result => {setCrimeData(result)})
+    .catch(e=>console.log(e))
+  },[])
 
   function handleSubmit() {
     const url = "http://localhost:5000/crimes/add"
@@ -29,6 +47,10 @@ export default function CreateNew() {
       .catch((e) => console.log(e))
   }
 
+  const areaMenu = areaData.map((item) => <MenuItem value={item.name}>{item.name}</MenuItem>)
+  const crimeMenu = crimeData.map((item) => <MenuItem value={item}>{item}</MenuItem>)
+
+ 
   return (
     <div className="centralise">
       <FormControl
@@ -44,10 +66,7 @@ export default function CreateNew() {
           value={type}
           onChange={(e) => setType(e.target.value)}
         >
-          <MenuItem value="All">All</MenuItem>
-          <MenuItem value={"Murder"}>Murder</MenuItem>
-          <MenuItem value={"Whatever"}>Whatever</MenuItem>
-          <MenuItem value={"Whatever2"}>Whatever2</MenuItem>
+          {crimeMenu}
         </Select>
       </FormControl>
       <FormControl
@@ -63,10 +82,7 @@ export default function CreateNew() {
           value={area}
           onChange={(e) => setArea(e.target.value)}
         >
-          <MenuItem value="All">All</MenuItem>
-          <MenuItem value={"Murder"}>Murder</MenuItem>
-          <MenuItem value={"Whatever"}>Whatever</MenuItem>
-          <MenuItem value={"Whatever2"}>Whatever2</MenuItem>
+          {areaMenu}
         </Select>
       </FormControl>
       <Input
