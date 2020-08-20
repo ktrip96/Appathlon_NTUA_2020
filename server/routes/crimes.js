@@ -33,6 +33,21 @@ router.get("/date", (req, res) => {
   .catch((err) => res.status(400).json("Error17: " + err))
 })
 
+// GET RANKING OF CRIMES WITH PARTICULAR TYPE OF CRIME
+
+router.get("/complex", (req, res) => {
+  const {type, number} = req.query
+  Crime.aggregate([
+    {$match: {type:type}},
+    {$group: {_id:"$area",postedCrimes:{$sum:1}}},
+    {$sort: {postedCrimes:-1}}
+  ]).limit(Number(number))
+  .then((crime)=>{
+    res.json(crime)
+  })
+  .catch((e)=>res.status(400).json("Error 18: " + e))
+})
+
 
 // GET A SPECIFIC CRIME
 router.route("/:id").get((req, res) => {

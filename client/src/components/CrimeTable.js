@@ -13,6 +13,18 @@ export default function CrimeTable({ day,month,year }) {
   ]
   const [data, setData] = useState([])
 
+  useEffect(()=>{
+    fetch(`http://localhost:5000/crimes`,{
+          method:'GET'
+      })
+      .then(response=>response.json())
+      .then(res => {
+        console.log("Crimetable FIRST TIME data:", res)
+        setData(res)
+      })
+      .catch(error=>console.log(error))
+  },[])
+
   useEffect(() => {
     fetch(`http://localhost:5000/crimes/date?day=${day}&month=${month}&year=${year}`,{
           method:'GET'

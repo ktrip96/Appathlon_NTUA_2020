@@ -18,42 +18,64 @@ function monthConverter(number) {
   } else return number
 }
 
+
+
 export default function Ranking() {
   const [value, setValue] = useState("3")
   const [type, setType] = useState("All")
   const [data, setData] = useState()
+  const [field, setField] = useState("name")
   const [selectedDate, handleDateChange] = useState(new Date())
+  // eslint-disable-next-line
   const [month, setMonth] = useState(monthConverter(selectedDate.getMonth()))
+  // eslint-disable-next-line
   const [year, setYear] = useState(selectedDate.getFullYear())
   const [crimeData, setCrimeData] = useState([])
 
-  useEffect(()=>{
-    fetch('http://localhost:5000/crimes/distinct',{
-      method:'GET'
+  useEffect(() => {
+    fetch("http://localhost:5000/crimes/distinct", {
+      method: "GET",
     })
-    .then(res => res.json())
-    .then(result => {setCrimeData(result)})
-    .catch(e=>console.log(e))
-  },[])
+      .then((res) => res.json())
+      .then((result) => {
+        setCrimeData(result)
+      })
+      .catch((e) => console.log(e))
+  }, [])
 
   useEffect(() => {
     setMonth(monthConverter(selectedDate.getMonth()))
     setYear(selectedDate.getFullYear())
   }, [selectedDate])
 
-  const crimeMenu = crimeData.map((item) => <MenuItem value={item}>{item}</MenuItem>)
-
+  const crimeMenu = crimeData.map((item) => (
+    <MenuItem value={item}>{item}</MenuItem>
+  ))
 
   function handleSubmit() {
-    fetch(`http://localhost:5000/areas/ranking?number=${value}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res)
-        setData(res)
+    if (type === "All") {     
+      fetch(`http://localhost:5000/areas/ranking?number=${value}`, {
+        method: "GET",
       })
-      .catch((e) => console.log(e))
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res)
+          setData(res)
+          setField("name")
+        })
+        .catch((e) => console.log(e))
+    } else {
+      fetch(`http://localhost:5000/crimes/complex?type=${type}&number=${value}`, {
+        method: "GET",
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res)
+          setData(res)
+          setField("_id")
+        })
+        .catch((e) => console.log(e))
+    }
   }
 
   return (
@@ -105,22 +127,22 @@ export default function Ranking() {
           </Select>
         </FormControl>
       </div>
-      <div style={{display:'flex', justifyContent:'center'}}>
-      <Button
-        variant="contained"
-        style={{
-          width: "200px",
-          height: "50px",
-          background: "green",
-          color: "white",
-          marginTop:'20px'
-        }}
-        onClick={handleSubmit}
-      >
-        Show Graph
-      </Button>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          variant="contained"
+          style={{
+            width: "200px",
+            height: "50px",
+            background: "green",
+            color: "white",
+            marginTop: "20px",
+          }}
+          onClick={handleSubmit}
+        >
+          Show Graph
+        </Button>
       </div>
-      {data ? <AreaTable data={data} /> : null}
+      {data ? <AreaTable data={data} x={field} /> : null}
     </div>
   )
 }

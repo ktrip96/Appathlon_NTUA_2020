@@ -32,6 +32,8 @@ TriangleBar.propTypes = {
 export default class AreaTable extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/rnywhbu8/';
 
+  
+
   render() {
     return (
       <BarChart
@@ -43,7 +45,7 @@ export default class AreaTable extends PureComponent {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey={this.props.x} />
         <YAxis />
         <Bar dataKey="postedCrimes" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top' }}>
           {
