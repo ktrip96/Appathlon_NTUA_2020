@@ -9,14 +9,9 @@
 ### How to download 
 
 - git clone το repo.
-
-```
-cd Appathlon/server
-npm install
-cd Appathlon/client
-npm install
-```
+- **npm install** στον φακελο Appathlon/server ΚΑΙ στον φακελο Appathlon/client
 - Λόγω του authentication για να εχετε πρόσβαση στην εφαρμογη θα χρειαστειτε το αρχειο .env, που περιεχει τον κωδικο της βασης και τον jwt password.
+(αν το χρειαζεστε στειλτε μου μηνυμα στο ktrip96@gmail.com)
 
 
 ### Video Files
