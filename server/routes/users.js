@@ -3,7 +3,6 @@ const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const auth = require("../middleware/auth")
-const { findByIdAndDelete } = require("../models/User")
 
 // Get all Users
 router.route("/").get((req, res) => {
@@ -91,16 +90,6 @@ router.post("/login", async (req, res) => {
   }
 })
 
-// Private delete user with auth middleware
-
-router.delete("/delete", auth, async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.user)
-    res.json(deletedUser)
-  } catch (err) {
-    res.status(500).json({ error: err.message })
-  }
-})
 
 // Check if a token is Valid
 
@@ -120,6 +109,18 @@ router.post("/tokenIsValid", async (req, res) => {
     res.status(500).json({ error: err.message })
   }
 })
+
+// Private delete user with auth middleware
+
+router.delete("/delete", auth, async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.user)
+    res.json(deletedUser)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
+
 
 // Get a Single User if you have provided the right token
 

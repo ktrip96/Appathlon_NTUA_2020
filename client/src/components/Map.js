@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
+require('dotenv').config()
+
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
@@ -16,7 +18,7 @@ class SimpleMap extends Component {
     return (
       <div style={{ height: '700px', width: '800px' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyD1ngvuac07TSdSVKpvctQS-wwHkwa4FO8' }}
+          bootstrapURLKeys={{ key: process.env.GOOGLE }}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >

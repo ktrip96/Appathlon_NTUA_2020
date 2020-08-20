@@ -66,10 +66,12 @@ export default function Signin({ toggle }) {
     })
     .then(response => response.json())
     .then(res =>{
+      if(res.message !== undefined) alert(res.message)
+      else{
        localStorage.setItem('auth-token',res.token)
        setUserData({token:res.token, user:res.user})
-       // if wrong password alert
        history.push('/main')
+      }
     })
     .catch(error => console.log(error))
   } 
