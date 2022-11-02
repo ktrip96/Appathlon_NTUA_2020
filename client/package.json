@@ -14,7 +14,7 @@
     "d3-scale-chromatic": "^1.5.0",
     "google-map-react": "^2.0.8",
     "google-maps-react": "^2.0.6",
-    "material-table": "^1.68.0",
+    "material-table": "^1.69.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
